@@ -1,12 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import { Text, View, SafeAreaView, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Theme } from "../Components/Theme";
+import { useNavigation } from "@react-navigation/native";
 
-export function Intro() {
+export function Intro({ navigation }) {
     const [count, setCount] = useState(0);
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             <View style={styles.constainer}>
 
                 <Image source={require("../../assets/logo.png")} style={{ width: 70, height: 50 }} />
@@ -16,7 +17,7 @@ export function Intro() {
                 </View>
 
                 <View>
-                    <TouchableOpacity style={styles.appBTN}>
+                    <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")} style={styles.appBTN}>
                         <Text style={{ fontSize: 16, color: "white", fontFamily: Theme.fonts.text600 }}>Get Started</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.appBTN, { backgroundColor: "white" }]}>
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
     constainer: {
         flex: 1,
         padding: 20,
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     appBTN: {
         borderWidth: 1,
