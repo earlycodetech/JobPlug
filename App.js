@@ -12,6 +12,7 @@ import * as Font from 'expo-font';
 import { Intro } from './Framework/Screens/Intro';
 import { HomeScreen } from "./Framework/Screens/HomeScreen";
 import { StackNavigator } from "./Framework/Navigators/StackNavigator";
+import { AppProvider } from "./Framework/Components/globalVariables";
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -52,7 +53,9 @@ export default function App() {
 
   return (
     <View style={{ flex: 1 }}>
-      <StackNavigator />
+      <AppProvider>
+        <StackNavigator />
+      </AppProvider>
     </View>
   );
 }

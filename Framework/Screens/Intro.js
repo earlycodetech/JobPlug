@@ -20,7 +20,7 @@ export function Intro({ navigation }) {
                     <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")} style={styles.appBTN}>
                         <Text style={{ fontSize: 16, color: "white", fontFamily: Theme.fonts.text600 }}>Get Started</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.appBTN, { backgroundColor: "white" }]}>
+                    <TouchableOpacity onPress={() => navigation.navigate("Login", { metaData: "Emmanuel John" })} style={[styles.appBTN, { backgroundColor: "white" }]}>
                         <Text style={{ fontSize: 16, color: Theme.colors.primary, fontFamily: Theme.fonts.text600 }}>Sign In</Text>
                     </TouchableOpacity>
                 </View>
