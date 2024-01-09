@@ -17,6 +17,16 @@ const validation = yup.object({
     password: yup.string().required().min(8).max(20)
 })
 
+function errorMessage(input) {
+    const parts = input.split('/');
+    const errorMessage = parts[parts.length - 1].replace(/-/g, ' ');
+    const formattedErrorMessage = errorMessage
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+    return formattedErrorMessage;
+}
+
 
 export function Login({ navigation, route }) {
     // console.log(route.params.metaData)
@@ -37,10 +47,10 @@ export function Login({ navigation, route }) {
                                 })
                             })
                             .catch((error) => {
-                                console.log(error);
+                                // console.log(typeof error.code)
                                 Alert.alert(
-                                    "Message",
-                                    "Sorry, something went wrong",
+                                    "Message!",
+                                    errorMessage(error.code),
                                     [{ text: "Try Again" }]
                                 )
                             })

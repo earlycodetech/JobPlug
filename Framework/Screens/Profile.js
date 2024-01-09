@@ -6,7 +6,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { Theme } from "../Components/Theme";
 
-export function Profile() {
+export function Profile({ navigation }) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
@@ -36,7 +36,7 @@ export function Profile() {
                         <FontAwesome5 name='lock' size={30} style={{ paddingRight: 20 }} />
                         <Text style={{ fontFamily: Theme.fonts.text500 }}>Change password</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.ProfileBtn}>
+                    <TouchableOpacity onPress={() => navigation.navigate("Intro")} style={styles.ProfileBtn}>
                         <SimpleLineIcons name='logout' size={30} style={{ paddingRight: 20 }} />
                         <Text style={{ fontFamily: Theme.fonts.text500 }}>Logout</Text>
                     </TouchableOpacity>
