@@ -1,24 +1,18 @@
-import { Alert, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useContext } from 'react'
 import { Button } from 'react-native-paper'
 import { Theme } from '../Components/Theme'
 import { AppContext } from '../Components/globalVariables'
 import { Formik } from 'formik'
 import * as yup from "yup"
-import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
-import { authentication } from '../../Firebase/settings'
 
-const validation = yup.object({
-    email: yup.string()
-        .required()
-        .email("Enter a valid email")
-        .min(5)
-        .max(30),
-    password: yup.string().required().min(8).max(20)
+
+const validationSchema = yup.object({
+    email: yup.string().required().min(5).max(100).email(),
+    password: yup.string().required().min(6).max(20)
 })
 
-
-export function Login({ navigation, route }) {
+export function ForgotPassword({ navigation, route }) {
     // console.log(route.params.metaData)
     const { email, setEmail } = useContext(AppContext)
     // const [email, setEmail] = useState("")
@@ -27,25 +21,12 @@ export function Login({ navigation, route }) {
         <SafeAreaView style={{ flex: 1 }} >
             <View style={styles.container}>
                 <Formik
+                    style={{ flex: 1 }}
                     initialValues={{ email: "", password: "" }}
                     onSubmit={(value) => {
-                        signInWithEmailAndPassword(authentication, value.email, value.password)
-                            .then(() => {
-                                onAuthStateChanged(authentication, (user) => {
-                                    console.log(user.uid);
-                                    navigation.navigate("HomeScreen")
-                                })
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                                Alert.alert(
-                                    "Message",
-                                    "Sorry, something went wrong",
-                                    [{ text: "Try Again" }]
-                                )
-                            })
+                        console.log(value);
                     }}
-                    validationSchema={validation}
+                    validationSchema={validationSchema}
                 >
                     {(prop) => {
                         return (
@@ -61,27 +42,15 @@ export function Login({ navigation, route }) {
                                 />
                                 <Text style={[styles.error, { display: prop.errors.email ? "flex" : "none" }]}>{prop.errors.email}</Text>
 
-                                <Text style={styles.placeholder}>Password</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    autoCapitalize="none"
-                                    secureTextEntry
-                                    onChangeText={prop.handleChange("password")}
-                                />
-                                <Text style={[styles.error, { display: prop.errors.password ? "flex" : "none" }]}>{prop.errors.password}</Text>
-
-                                <TouchableOpacity onPress={() => setEmail("daniel@gmail.com")} style={{ marginBottom: 10 }}>
-                                    <Text style={{ fontSize: 16, color: Theme.colors.primary, fontFamily: Theme.fonts.text600 }}>Forgot password?</Text>
-                                </TouchableOpacity>
                                 <TouchableOpacity onPress={prop.handleSubmit} style={styles.appBTN}>
-                                    <Text style={{ fontSize: 16, color: "white", fontFamily: Theme.fonts.text600 }}>Login</Text>
+                                    <Text style={{ fontSize: 16, color: "white", fontFamily: Theme.fonts.text600 }}>Send Link</Text>
                                 </TouchableOpacity>
                             </View>
                         )
                     }}
                 </Formik>
-                <TouchableOpacity onPress={() => navigation.navigate("Signup")} style={{ alignItems: "center", marginTop: 10 }}>
-                    <Text style={{ fontSize: 16, color: Theme.colors.primary, fontFamily: Theme.fonts.text600 }}>Don't have an account?</Text>
+                <TouchableOpacity onPress={() => navigation.navigate("Login")} style={{ alignItems: "center", marginTop: 10 }}>
+                    <Text style={{ fontSize: 16, color: Theme.colors.primary, fontFamily: Theme.fonts.text600 }}>Remember your password?</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
