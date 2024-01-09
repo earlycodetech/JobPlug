@@ -23,32 +23,32 @@ export function Profile({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View>
+                <View style={{ flex: 1 }}>
                     <TouchableOpacity style={styles.ProfileBtn}>
-                        <MaterialCommunityIcons name='account-check' size={30} style={{ paddingRight: 20 }} />
+                        <MaterialCommunityIcons name='account-check' size={25} style={{ paddingRight: 20 }} />
                         <Text style={{ fontFamily: Theme.fonts.text500 }}>Verification</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.ProfileBtn}>
-                        <Ionicons name='settings-sharp' size={30} style={{ paddingRight: 20 }} />
+                        <Ionicons name='settings-sharp' size={25} style={{ paddingRight: 20 }} />
                         <Text style={{ fontFamily: Theme.fonts.text500 }}>Settings</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.ProfileBtn}>
-                        <FontAwesome5 name='lock' size={30} style={{ paddingRight: 20 }} />
+                        <FontAwesome5 name='lock' size={25} style={{ paddingRight: 20 }} />
                         <Text style={{ fontFamily: Theme.fonts.text500 }}>Change password</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate("Intro")} style={styles.ProfileBtn}>
-                        <SimpleLineIcons name='logout' size={30} style={{ paddingRight: 20 }} />
-                        <Text style={{ fontFamily: Theme.fonts.text500 }}>Logout</Text>
-                    </TouchableOpacity>
                 </View>
-                <Modal
-                    visible={false}
-                >
-                    <View style={{ marginTop: 40, padding: 20 }}>
-                        <Text style={{ fontFamily: Theme.fonts.text500 }}>Logout</Text>
-                    </View>
-                </Modal>
+                <TouchableOpacity onPress={() => navigation.navigate("Intro")} style={[styles.ProfileBtn, { backgroundColor: "#cd0000af" }]}>
+                    <SimpleLineIcons name='logout' size={25} style={{ paddingRight: 20, color: "white" }} col />
+                    <Text style={{ fontFamily: Theme.fonts.text700, color: "#fffcfc" }}>Logout</Text>
+                </TouchableOpacity>
             </View>
+            <Modal
+                visible={false}
+            >
+                <View style={{ marginTop: 40, padding: 20 }}>
+                    <Text style={{ fontFamily: Theme.fonts.text500 }}>Logout</Text>
+                </View>
+            </Modal>
         </SafeAreaView>
     )
 }
@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
         margin: Platform.OS == 'android' ? StatusBar.currentHeight : null,
         // alignItems: 'center',
         padding: 20,
-        justifyContent: 'space-between'
     },
     EditProfileBtn: {
         borderWidth: 1,
@@ -69,9 +68,11 @@ const styles = StyleSheet.create({
         marginVertical: 20
     },
     ProfileBtn: {
-        paddingVertical: 40,
+        padding: 10,
         flexDirection: 'row',
-        padding: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: "#00000012",
+        borderRadius: 10,
+        marginBottom: 10
     },
 })

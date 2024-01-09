@@ -14,9 +14,9 @@ export function StackNavigator() {
             <Stack.Navigator initialRouteName="Intro" screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Intro" component={Intro} />
                 <Stack.Screen name="HomeScreen" component={HomeScreen} />
-                <Stack.Screen name="Login" component={Login} />
-                <Stack.Screen name="Signup" component={Signup} />
-                <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+                <Stack.Screen name="Login" component={Login} options={{ headerShown: true, title: "Log In" }} />
+                <Stack.Screen name="Signup" component={Signup} options={{ headerShown: true, title: "Sign Up" }} />
+                <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: true, title: "Forgot Password" }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

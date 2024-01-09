@@ -5,6 +5,7 @@ import { Theme } from '../Components/Theme'
 import { AppContext } from '../Components/globalVariables'
 import { Formik } from 'formik'
 import * as yup from "yup"
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 
 
 const validationSchema = yup.object({
@@ -31,8 +32,9 @@ export function ForgotPassword({ navigation, route }) {
                     {(prop) => {
                         return (
                             <View style={styles.form}>
-                                <Text style={styles.header}>Login Your</Text>
-                                <Text style={[styles.header, { marginBottom: 20 }]}>Account!</Text>
+                                <Text style={styles.header}>Forgot account</Text>
+                                <Text style={[styles.header, { marginBottom: 20 }]}>Password?</Text>
+                                <Text style={styles.placeholder}>Please enter your account email, and a password reset link will be sent to your email.</Text>
 
                                 <Text style={styles.placeholder}>Email Address</Text>
                                 <TextInput

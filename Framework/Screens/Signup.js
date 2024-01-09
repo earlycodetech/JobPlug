@@ -2,6 +2,20 @@ import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } fro
 import React from 'react'
 import { Button } from 'react-native-paper'
 import { Theme } from '../Components/Theme'
+import { Formik } from 'formik'
+import * as yup from "yup"
+import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
+import { authentication } from '../../Firebase/settings'
+import { errorMessage } from '../Components/formatErrorMessage'
+
+const validation = yup.object({
+    email: yup.string()
+        .required()
+        .email("Enter a valid email")
+        .min(5)
+        .max(30),
+    password: yup.string().required().min(8).max(20)
+})
 
 export function Signup({ navigation }) {
     // const [email, setEmail] = useState("")
@@ -9,49 +23,84 @@ export function Signup({ navigation }) {
     return (
         <SafeAreaView style={{ flex: 1 }} >
             <View style={styles.container}>
-                <View style={styles.form}>
-                    <Text style={styles.header}>Sign Up</Text>
-                    <Text style={[styles.header, { marginBottom: 20 }]}>Your Account!</Text>
+                <Formik
+                    initialValues={{ email: "", password: "" }}
+                    onSubmit={(value) => {
+                        createUserWithEmailAndPassword(authentication, value.email, value.password)
+                            .then(() => {
+                                onAuthStateChanged(authentication, (user) => {
+                                    console.log(user.uid);
+                                    navigation.navigate("HomeScreen")
+                                })
+                            })
+                            .catch((error) => {
+                                // console.log(typeof error.code)
+                                Alert.alert(
+                                    "Message!",
+                                    errorMessage(error.code),
+                                    [{ text: "Try Again" }]
+                                )
+                            })
+                    }}
+                    validationSchema={validation}
+                >
+                    {(prop) => {
+                        return (
+                            <View style={styles.form}>
+                                <Text style={styles.header}>Sign Up</Text>
+                                <Text style={[styles.header, { marginBottom: 20 }]}>Your Account!</Text>
 
-                    <Text style={styles.placeholder}>First Name</Text>
-                    <TextInput
-                        style={styles.input}
-                        autoCapitalize="none"
-                    // onChangeText={ }
-                    />
-                    <Text style={styles.placeholder}>Last Name</Text>
-                    <TextInput
-                        style={styles.input}
-                        autoCapitalize="none"
-                    // onChangeText={ }
-                    />
-                    <Text style={styles.placeholder}>Home Address</Text>
-                    <TextInput
-                        style={styles.input}
-                        autoCapitalize="none"
-                    // onChangeText={ }
-                    />
+                                <Text style={styles.placeholder}>First Name</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    autoCapitalize="none"
+                                // onChangeText={ }
+                                />
+                                <Text style={styles.placeholder}>Last Name</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    autoCapitalize="none"
+                                // onChangeText={ }
+                                />
+                                <Text style={styles.placeholder}>Home Address</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    autoCapitalize="none"
+                                // onChangeText={ }
+                                />
 
-                    <Text style={styles.placeholder}>Email Address</Text>
-                    <TextInput
-                        style={styles.input}
-                        autoCapitalize="none"
-                    // onChangeText={ }
-                    />
-                    <Text style={styles.placeholder}>Password</Text>
-                    <TextInput
-                        style={styles.input}
-                        autoCapitalize="none"
-                        secureTextEntry
-                    // onChangeText={ }
-                    />
-                    <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")} style={styles.appBTN}>
-                        <Text style={{ fontSize: 16, color: "white", fontFamily: Theme.fonts.text600 }}>Login</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate("Login")} style={{ alignItems: "center", marginTop: 10 }}>
-                        <Text style={{ fontSize: 16, color: Theme.colors.primary, fontFamily: Theme.fonts.text600 }}>I have an account. Login</Text>
-                    </TouchableOpacity>
-                </View>
+                                <Text style={styles.placeholder}>Email Address</Text>
+                                <TextInput
+                                    style={[styles.input, { marginBottom: 0 }]}
+                                    autoCapitalize="none"
+                                    onChangeText={prop.handleChange("email")}
+                                    onBlur={prop.handleBlur("email")}
+                                    value={prop.values.email}
+                                />
+                                <Text style={[styles.error, { display: prop.errors.email ? "flex" : "none" }]}>{prop.errors.email}</Text>
+
+                                <Text style={styles.placeholder}>Password</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    autoCapitalize="none"
+                                    secureTextEntry
+                                    onChangeText={prop.handleChange("password")}
+                                    onBlur={prop.handleBlur("password")}
+                                    value={prop.values.password}
+
+                                />
+                                <Text style={[styles.error, { display: prop.errors.password ? "flex" : "none" }]}>{prop.errors.password}</Text>
+
+                                <TouchableOpacity onPress={prop.handleSubmit} style={styles.appBTN}>
+                                    <Text style={{ fontSize: 16, color: "white", fontFamily: Theme.fonts.text600 }}>Sign Up</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )
+                    }}
+                </Formik>
+                <TouchableOpacity onPress={() => navigation.navigate("Login")} style={{ alignItems: "center", marginTop: 10 }}>
+                    <Text style={{ fontSize: 16, color: Theme.colors.primary, fontFamily: Theme.fonts.text600 }}>I have an account. Login</Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     )

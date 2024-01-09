@@ -7,6 +7,7 @@ import { Formik } from 'formik'
 import * as yup from "yup"
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 import { authentication } from '../../Firebase/settings'
+import { errorMessage } from '../Components/formatErrorMessage'
 
 const validation = yup.object({
     email: yup.string()
@@ -16,16 +17,6 @@ const validation = yup.object({
         .max(30),
     password: yup.string().required().min(8).max(20)
 })
-
-function errorMessage(input) {
-    const parts = input.split('/');
-    const errorMessage = parts[parts.length - 1].replace(/-/g, ' ');
-    const formattedErrorMessage = errorMessage
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-    return formattedErrorMessage;
-}
 
 
 export function Login({ navigation, route }) {
@@ -68,8 +59,10 @@ export function Login({ navigation, route }) {
                                     style={[styles.input, { marginBottom: 0 }]}
                                     autoCapitalize="none"
                                     onChangeText={prop.handleChange("email")}
+                                    onBlur={prop.handleBlur("email")}
+                                    value={prop.values.email}
                                 />
-                                <Text style={[styles.error, { display: prop.errors.email ? "flex" : "none" }]}>{prop.errors.email}</Text>
+                                <Text style={[styles.error, { display: prop.touched.email && prop.errors.email ? "flex" : "none" }]}>{prop.errors.email}</Text>
 
                                 <Text style={styles.placeholder}>Password</Text>
                                 <TextInput
@@ -77,10 +70,12 @@ export function Login({ navigation, route }) {
                                     autoCapitalize="none"
                                     secureTextEntry
                                     onChangeText={prop.handleChange("password")}
+                                    onBlur={prop.handleBlur("password")}
+                                    value={prop.values.password}
                                 />
-                                <Text style={[styles.error, { display: prop.errors.password ? "flex" : "none" }]}>{prop.errors.password}</Text>
+                                <Text style={[styles.error, { display: prop.touched.password && prop.errors.password ? "flex" : "none" }]}>{prop.errors.password}</Text>
 
-                                <TouchableOpacity onPress={() => setEmail("daniel@gmail.com")} style={{ marginBottom: 10 }}>
+                                <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")} style={{ marginBottom: 10 }}>
                                     <Text style={{ fontSize: 16, color: Theme.colors.primary, fontFamily: Theme.fonts.text600 }}>Forgot password?</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={prop.handleSubmit} style={styles.appBTN}>
