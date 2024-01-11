@@ -1,12 +1,14 @@
-import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Alert, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useContext } from 'react'
 import { Button } from 'react-native-paper'
 import { Theme } from '../Components/Theme'
 import { Formik } from 'formik'
 import * as yup from "yup"
 import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
-import { authentication } from '../../Firebase/settings'
+import { authentication, db } from '../../Firebase/settings'
 import { errorMessage } from '../Components/formatErrorMessage'
+import { collection, doc, setDoc } from 'firebase/firestore'
+import { AppContext } from '../Components/globalVariables'
 
 const validation = yup.object({
     email: yup.string()
@@ -18,6 +20,8 @@ const validation = yup.object({
 })
 
 export function Signup({ navigation }) {
+    const { setPreloader } = useContext(AppContext)
+
     // const [email, setEmail] = useState("")
 
     return (
@@ -26,11 +30,27 @@ export function Signup({ navigation }) {
                 <Formik
                     initialValues={{ email: "", password: "" }}
                     onSubmit={(value) => {
+                        setPreloader(true)
                         createUserWithEmailAndPassword(authentication, value.email, value.password)
                             .then(() => {
                                 onAuthStateChanged(authentication, (user) => {
-                                    console.log(user.uid);
-                                    navigation.navigate("HomeScreen")
+                                    const userUID = user.uid
+
+                                    setDoc(doc(db, "users", userUID), {
+                                        email: value.email,
+                                        password: value.password
+                                    }).then(() => {
+                                        setPreloader(false)
+                                        navigation.navigate("HomeScreen")
+                                    }).catch((error) => {
+                                        // console.log(typeof error.code)
+                                        setPreloader(false)
+                                        Alert.alert(
+                                            "Message!",
+                                            errorMessage(error.code),
+                                            [{ text: "Try Again" }]
+                                        )
+                                    })
                                 })
                             })
                             .catch((error) => {

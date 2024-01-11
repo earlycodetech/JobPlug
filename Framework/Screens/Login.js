@@ -21,8 +21,25 @@ const validation = yup.object({
 
 export function Login({ navigation, route }) {
     // console.log(route.params.metaData)
-    const { email, setEmail } = useContext(AppContext)
+    const { setPreloader } = useContext(AppContext)
     // const [email, setEmail] = useState("")
+
+    const users = [
+        {
+            oisudbw4o80: {
+                fname: "John",
+                lname: 'Dan',
+                age: 28
+            }
+        },
+        {
+            nisd7c92b2i3: {
+                fname: "Emmy",
+                lname: 'Jay',
+                age: 36
+            }
+        },
+    ]
 
     return (
         <SafeAreaView style={{ flex: 1 }} >
@@ -30,14 +47,17 @@ export function Login({ navigation, route }) {
                 <Formik
                     initialValues={{ email: "", password: "" }}
                     onSubmit={(value) => {
+                        setPreloader(true);
                         signInWithEmailAndPassword(authentication, value.email, value.password)
                             .then(() => {
                                 onAuthStateChanged(authentication, (user) => {
                                     console.log(user.uid);
+                                    setPreloader(false)
                                     navigation.navigate("HomeScreen")
                                 })
                             })
                             .catch((error) => {
+                                setPreloader(false)
                                 // console.log(typeof error.code)
                                 Alert.alert(
                                     "Message!",

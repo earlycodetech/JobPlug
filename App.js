@@ -13,6 +13,7 @@ import { Intro } from './Framework/Screens/Intro';
 import { HomeScreen } from "./Framework/Screens/HomeScreen";
 import { StackNavigator } from "./Framework/Navigators/StackNavigator";
 import { AppProvider } from "./Framework/Components/globalVariables";
+import { Preloader } from "./Framework/Components/Preloader";
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -54,6 +55,7 @@ export default function App() {
   return (
     <View style={{ flex: 1 }}>
       <AppProvider>
+        <Preloader />
         <StackNavigator />
       </AppProvider>
     </View>
