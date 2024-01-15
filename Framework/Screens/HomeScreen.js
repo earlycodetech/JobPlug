@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import { Text, View, SafeAreaView, StyleSheet, Image, TouchableOpacity, TextInput, Dimensions } from "react-native";
 import { Theme } from "../Components/Theme";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -9,6 +9,10 @@ import { Intro } from "./Intro";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import { Profile } from "./Profile";
 import Carousel from 'react-native-reanimated-carousel';
+import { AppContext } from "../Components/globalVariables";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../Firebase/settings";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 
 const carouselLinks = [
@@ -19,14 +23,33 @@ const carouselLinks = [
 
 function Home() {
     const screenWidth = Dimensions.get("screen").width
+    const { userUID, setUserInfo, userInfo } = useContext(AppContext)
+
+    async function getUserInfo() {
+        const userInfo = await getDoc(doc(db, "users", userUID))
+        // console.log(userInfo.data());
+        setUserInfo(userInfo.data())
+    }
+
+    useEffect(() => {
+        // console.log(userUID);
+        getUserInfo()
+    }, [])
+
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.constainer}>
 
                 <View style={styles.topBar}>
-                    <Image source={require("../../assets/logo.png")} style={styles.dp} />
-                    <Searchbar style={{ flex: 1, paddingEnd: 20, }} placeholder="Search for..." />
-                    <FontAwesomeIcon icon={faBell} style={{}} size={29} color="#0000007a" />
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+                        <Image source={require("../../assets/logo.png")} style={styles.dp} />
+                        <Text style={{ fontSize: 18 }}>{userInfo.firstName} {userInfo.lastName}</Text>
+                    </View>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+                        <FontAwesomeIcon icon={faMagnifyingGlass} style={{}} size={29} color="#0000007a" />
+                        <FontAwesomeIcon icon={faBell} style={{}} size={29} color="#0000007a" />
+                    </View>
                 </View>
 
                 <View style={{ flex: 1, marginVertical: 10, }}>

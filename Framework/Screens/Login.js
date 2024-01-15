@@ -21,25 +21,8 @@ const validation = yup.object({
 
 export function Login({ navigation, route }) {
     // console.log(route.params.metaData)
-    const { setPreloader } = useContext(AppContext)
+    const { setPreloader, setUserUID } = useContext(AppContext)
     // const [email, setEmail] = useState("")
-
-    const users = [
-        {
-            oisudbw4o80: {
-                fname: "John",
-                lname: 'Dan',
-                age: 28
-            }
-        },
-        {
-            nisd7c92b2i3: {
-                fname: "Emmy",
-                lname: 'Jay',
-                age: 36
-            }
-        },
-    ]
 
     return (
         <SafeAreaView style={{ flex: 1 }} >
@@ -51,7 +34,8 @@ export function Login({ navigation, route }) {
                         signInWithEmailAndPassword(authentication, value.email, value.password)
                             .then(() => {
                                 onAuthStateChanged(authentication, (user) => {
-                                    console.log(user.uid);
+                                    setUserUID(user.uid)
+                                    // console.log(user.uid);
                                     setPreloader(false)
                                     navigation.navigate("HomeScreen")
                                 })

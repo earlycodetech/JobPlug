@@ -28,7 +28,7 @@ export function Signup({ navigation }) {
         <SafeAreaView style={{ flex: 1 }} >
             <View style={styles.container}>
                 <Formik
-                    initialValues={{ email: "", password: "" }}
+                    initialValues={{ email: "", password: "", firstName: "", lastName: "", address: "", gender: "" }}
                     onSubmit={(value) => {
                         setPreloader(true)
                         createUserWithEmailAndPassword(authentication, value.email, value.password)
@@ -37,8 +37,13 @@ export function Signup({ navigation }) {
                                     const userUID = user.uid
 
                                     setDoc(doc(db, "users", userUID), {
+                                        balance: 0,
+                                        firstName: value.firstName,
+                                        lastName: value.lastName,
+                                        gender: value.gender,
+                                        address: value.address,
+                                        accountStatus: "active",
                                         email: value.email,
-                                        password: value.password
                                     }).then(() => {
                                         setPreloader(false)
                                         navigation.navigate("HomeScreen")
@@ -74,19 +79,32 @@ export function Signup({ navigation }) {
                                 <TextInput
                                     style={styles.input}
                                     autoCapitalize="none"
-                                // onChangeText={ }
+                                    onChangeText={prop.handleChange("firstName")}
+                                    onBlur={prop.handleBlur("firstName")}
+                                    value={prop.values.firstName}
                                 />
                                 <Text style={styles.placeholder}>Last Name</Text>
                                 <TextInput
                                     style={styles.input}
                                     autoCapitalize="none"
-                                // onChangeText={ }
+                                    onChangeText={prop.handleChange("lastName")}
+                                    onBlur={prop.handleBlur("lastName")}
+                                    value={prop.values.lastName}
                                 />
                                 <Text style={styles.placeholder}>Home Address</Text>
                                 <TextInput
                                     style={styles.input}
-                                    autoCapitalize="none"
-                                // onChangeText={ }
+                                    onChangeText={prop.handleChange("address")}
+                                    onBlur={prop.handleBlur("address")}
+                                    value={prop.values.address}
+                                />
+
+                                <Text style={styles.placeholder}>Gender</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    onChangeText={prop.handleChange("gender")}
+                                    onBlur={prop.handleBlur("gender")}
+                                    value={prop.values.gender}
                                 />
 
                                 <Text style={styles.placeholder}>Email Address</Text>

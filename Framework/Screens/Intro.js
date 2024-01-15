@@ -10,7 +10,7 @@ export function Intro({ navigation }) {
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             <View style={styles.constainer}>
 
-                <Image source={require("../../assets/logo.png")} style={{ width: 70, height: 50 }} />
+                <Image source={require("../../assets/logo.png")} style={{ width: 70, height: 70 }} />
                 <View>
                     <Image source={require("../../assets/Interview.png")} style={{ width: "100%", height: 250 }} />
                     <Text style={{ fontFamily: Theme.fonts.text200, color: "black", fontSize: 25, textAlign: "center" }}>Welcome to JobPlug, where opportunities await! Your gateway to a world of career possibilities.</Text>
