@@ -20,7 +20,7 @@ const validation = yup.object({
 })
 
 export function Signup({ navigation }) {
-    const { setPreloader } = useContext(AppContext)
+    const { setPreloader, setUserUID } = useContext(AppContext)
 
     // const [email, setEmail] = useState("")
 
@@ -28,19 +28,19 @@ export function Signup({ navigation }) {
         <SafeAreaView style={{ flex: 1 }} >
             <View style={styles.container}>
                 <Formik
-                    initialValues={{ email: "", password: "", firstName: "", lastName: "", address: "", gender: "" }}
+                    initialValues={{ email: "", password: "", firstName: "", lastName: "", phone: "", address: "", gender: "" }}
                     onSubmit={(value) => {
                         setPreloader(true)
                         createUserWithEmailAndPassword(authentication, value.email, value.password)
                             .then(() => {
                                 onAuthStateChanged(authentication, (user) => {
-                                    const userUID = user.uid
-
+                                    setUserUID(user.uid)
                                     setDoc(doc(db, "users", userUID), {
                                         balance: 0,
                                         firstName: value.firstName,
                                         lastName: value.lastName,
                                         gender: value.gender,
+                                        phone: value.phone,
                                         address: value.address,
                                         accountStatus: "active",
                                         email: value.email,
@@ -91,6 +91,14 @@ export function Signup({ navigation }) {
                                     onBlur={prop.handleBlur("lastName")}
                                     value={prop.values.lastName}
                                 />
+                                <Text style={styles.placeholder}>Phone number</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    onChangeText={prop.handleChange("phone")}
+                                    onBlur={prop.handleBlur("phone")}
+                                    value={prop.values.phone}
+                                />
+
                                 <Text style={styles.placeholder}>Home Address</Text>
                                 <TextInput
                                     style={styles.input}

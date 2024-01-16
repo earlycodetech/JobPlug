@@ -17,7 +17,7 @@ export function Intro({ navigation }) {
                 </View>
 
                 <View>
-                    <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")} style={styles.appBTN}>
+                    <TouchableOpacity onPress={() => navigation.navigate("Signup")} style={styles.appBTN}>
                         <Text style={{ fontSize: 16, color: "white", fontFamily: Theme.fonts.text600 }}>Get Started</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate("Login", { metaData: "Emmanuel John" })} style={[styles.appBTN, { backgroundColor: "white" }]}>

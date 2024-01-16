@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useContext } from "react";
-import { Text, View, SafeAreaView, StyleSheet, Image, TouchableOpacity, TextInput, Dimensions } from "react-native";
+import { Text, View, SafeAreaView, StyleSheet, Image, TouchableOpacity, TextInput, Dimensions, Alert } from "react-native";
 import { Theme } from "../Components/Theme";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
@@ -10,9 +10,10 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { Profile } from "./Profile";
 import Carousel from 'react-native-reanimated-carousel';
 import { AppContext } from "../Components/globalVariables";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../Firebase/settings";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { PostJob } from "./PostJob";
 
 
 const carouselLinks = [
@@ -23,7 +24,7 @@ const carouselLinks = [
 
 function Home() {
     const screenWidth = Dimensions.get("screen").width
-    const { userUID, setUserInfo, userInfo } = useContext(AppContext)
+    const { userUID, setUserInfo, userInfo, setPreloader } = useContext(AppContext)
 
     async function getUserInfo() {
         const userInfo = await getDoc(doc(db, "users", userUID))
@@ -31,8 +32,38 @@ function Home() {
         setUserInfo(userInfo.data())
     }
 
+    function editProfile() {
+        setPreloader(true)
+        updateDoc(doc(db, "users", userUID), {
+            nickname: userInfo.firstName + " " + userInfo.lastName,
+            phone: "08066852433",
+            lastName: "Joel"
+        }).then(() => {
+            setPreloader(false)
+            Alert.alert(
+                "Edit Profile",
+                "Profile has been edited successfully",
+            )
+        }).catch((error) => {
+            // console.log(typeof error.code)
+            setPreloader(false)
+            Alert.alert(
+                "Message!",
+                errorMessage(error.code),
+                [{ text: "Try Again" }]
+            )
+        })
+    }
+
     useEffect(() => {
         // console.log(userUID);
+
+        onSnapshot(collection(db, "jobs"), (snapshot) => {
+            snapshot.forEach(item => {
+                // console.log(item.data());
+            })
+        })
+
         getUserInfo()
     }, [])
 
@@ -76,6 +107,10 @@ function Home() {
                         )}
                     />
                 </View>
+
+                <TouchableOpacity onPress={editProfile} style={[styles.TextInput, { alignItems: 'center', borderColor: Theme.colors.blueMedium, backgroundColor: Theme.colors.blueMedium }]}>
+                    <Text style={{ fontFamily: Theme.fonts.text500, color: "white" }}>Share now</Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView >
     )
@@ -98,6 +133,10 @@ export function HomeScreen() {
                         size = focused ? 35 : 23
                         iconName = focused ? 'account' : 'account-outline';
                     }
+                    else if (route.name === 'PostJob') {
+                        size = focused ? 35 : 23
+                        iconName = focused ? 'plus' : 'plus-box-outline';
+                    }
 
                     return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
                 },
@@ -107,6 +146,7 @@ export function HomeScreen() {
             })}
         >
             <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="PostJob" component={PostJob} options={{ title: "Post Jobs" }} />
             <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>
     );
