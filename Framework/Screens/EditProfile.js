@@ -9,6 +9,8 @@ import { doc, updateDoc, } from 'firebase/firestore';
 import { AppContext } from '../Components/globalVariables';
 import { Theme } from '../Components/Theme';
 import { db } from '../../Firebase/settings';
+import * as Imagepicker from "expo-image-picker"
+
 
 export function EditProfile({ navigation }) {
     const { userUID, setPreloader, userInfo } = useContext(AppContext);
@@ -37,6 +39,15 @@ export function EditProfile({ navigation }) {
     const imageModal = () => {
         setimageMD(!imageMD);
     };
+
+    async function picker() {
+        const result = await Imagepicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 4],
+            quality: 1,
+        })
+        console.log(result);
+    }
 
     function editProfile() {
         setPreloader(true)
@@ -165,7 +176,7 @@ export function EditProfile({ navigation }) {
                         <View>
 
                             <TouchableOpacity onPress={() => {
-                                closeModal()
+                                closeModal(); picker()
                             }}>
                                 <View style={{ margin: 10, marginTop: 0, padding: 5, flexDirection: "row", }}>
                                     <FontAwesomeIcon

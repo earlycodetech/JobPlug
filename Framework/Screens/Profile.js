@@ -47,7 +47,7 @@ export function Profile({ navigation }) {
                     </View>
                     <View style={{ marginBottom: 10 }}>
                         <Text style={{ fontSize: 15, fontFamily: Theme.fonts.text500, textAlign: "center" }}>Balance</Text>
-                        <Text style={{ fontSize: 14, }}>$<Text style={{ fontSize: 40 }}>{formatMoney(userInfo.balance)}</Text></Text>
+                        <Text style={{ fontSize: 14, }}>$<Text style={{ fontSize: 20 }}>{formatMoney(userInfo.balance)}</Text></Text>
                         <TouchableOpacity onPress={() => navigation.navigate("Fund")}
                             style={{ borderColor: Theme.colors.primary, borderWidth: 1, padding: 5, borderRadius: 100, width: 100, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                             <FontAwesomeIcon icon={faPlusCircle} color={Theme.colors.primary} />
