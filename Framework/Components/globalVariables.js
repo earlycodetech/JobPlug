@@ -3,8 +3,7 @@ import { createContext, useState } from "react";
 const AppContext = createContext();
 
 function AppProvider({ children }) {
-    const [email, setEmail] = useState('');
-    const [userUID, setUserUID] = useState('');
+    const [userUID, setUserUID] = useState('wYDKqvQUXDhSUtPprlcdb2vKjnI3');
     const [userInfo, setUserInfo] = useState('');
     const [password, setPassword] = useState(undefined);
     const [preloader, setPreloader] = useState(false);
@@ -12,7 +11,6 @@ function AppProvider({ children }) {
 
     return (
         <AppContext.Provider value={{
-            email, setEmail,
             userInfo, setUserInfo,
             password, setPassword,
             preloader, setPreloader,

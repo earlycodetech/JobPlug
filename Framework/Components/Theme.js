@@ -8,6 +8,7 @@ export const Theme = {
         greenLight: "#0E4D2B",
         greenMedium: "#50C878",
         greenDark: "#B7E4C7",
+        text: "#00000099",
     },
     fonts: {
         brand: "Pacifico_400Regular",

@@ -110,7 +110,8 @@ const styles = StyleSheet.create({
     },
     header: {
         fontSize: 35,
-        fontFamily: Theme.fonts.text700
+        fontFamily: Theme.fonts.text700,
+        color: Theme.colors.primary
     },
     input: {
         borderColor: "gray",
