@@ -28,9 +28,10 @@ function Home({ navigation }) {
     const [jobs, setJobs] = useState([]);
 
     async function getUserInfo() {
-        const userInfo = await getDoc(doc(db, "users", userUID))
-        // console.log(userInfo.data());
-        setUserInfo(userInfo.data())
+        onSnapshot(doc(db, "users", userUID), (snapshot) => {
+            // console.log(snapshot.data());
+            setUserInfo(snapshot.data())
+        })
     }
 
 
@@ -126,7 +127,7 @@ function Home({ navigation }) {
                                     </View>
                                 )
                             }}
-                            key={({ item }) => {item.id}}
+                            key={({ item }) => { item.id }}
                         />
                     </View>
                 </ScrollView>

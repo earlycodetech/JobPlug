@@ -8,7 +8,7 @@ import { } from 'react-native';
 import { doc, updateDoc, } from 'firebase/firestore';
 import { AppContext } from '../Components/globalVariables';
 import { Theme } from '../Components/Theme';
-import { db } from '../../Firebase/settings';
+import { db, imgStorage } from '../../Firebase/settings';
 import * as Imagepicker from "expo-image-picker"
 
 
@@ -48,6 +48,27 @@ export function EditProfile({ navigation }) {
             quality: 1,
         })
         console.log(result);
+        if (!result.canceled) {
+            const { uri } = result.assets[0];
+            setImage(uri)
+            uplaodToStorage();
+        }
+    }
+
+    async function uplaodToStorage() {
+        try {
+            let response = await fetch(image);
+            console.log(response);
+            const imageBlob = await response.blob()
+            await imgStorage().ref().child(`ProfileImages/${userUID}`).put(imageBlob);
+        } catch {
+            setPreloader(false)
+            Alert.alert(
+                "Upload Status",
+                "Failed to upload profile image. Please try again",
+                [{ text: 'OK' }]
+            )
+        }
     }
 
     function editProfile() {
@@ -237,7 +258,7 @@ export function EditProfile({ navigation }) {
                         <View style={{ alignItems: 'center', padding: 5, justifyContent: 'center' }}>
                             <Image source={{ uri: image }} style={{ width: 300, height: 300, borderRadius: 400, }} />
                         </View>
-                        <TouchableOpacity
+                        <TouchableOpacity onPress={() => { previewModal(); uplaodToStorage() }}
                             style={[styles.getStarted, { marginHorizontal: 10 }]}>
                             <Text style={{ fontFamily: Theme.fonts.text500, fontSize: 16, }}>Upload Image</Text>
                         </TouchableOpacity>

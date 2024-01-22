@@ -44,6 +44,7 @@ export function Signup({ navigation }) {
                                         address: value.address,
                                         accountStatus: "active",
                                         email: value.email,
+                                        image: null
                                     }).then(() => {
                                         setPreloader(false)
                                         navigation.navigate("HomeScreen")

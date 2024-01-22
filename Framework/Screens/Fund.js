@@ -104,8 +104,7 @@ export function Fund({ navigation }) {
                                         <Text style={[styles.modalText, { color: Theme.colors.green, fontSize: 20, fontWeight: "bold", fontFamily: null }]}>₦{formatMoney(amount + ((1.8 / 100) * amount))}</Text>
                                     </View>
 
-
-                                    <TouchableOpacity onPress={() => { closeModal(); navigation.navigate("Pay", { amount: amount + ((1.8 / 100) * amount) }) }} style={styles.appBTN}>
+                                    <TouchableOpacity onPress={() => { closeModal(); navigation.navigate("Pay", { amount: amount }) }} style={styles.appBTN}>
                                         <Text style={{ fontSize: 16, color: "white", fontFamily: Theme.fonts.text600 }}>Pay Now</Text>
                                     </TouchableOpacity>
                                 </View>
