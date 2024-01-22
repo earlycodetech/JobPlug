@@ -111,12 +111,12 @@ function Home({ navigation }) {
                                         <View style={{ backgroundColor: "#00000008", padding: 5, borderRadius: 5 }}>
                                             <Text numberOfLines={2} style={{ fontSize: 15, fontFamily: Theme.fonts.text500, color: Theme.colors.text }}>{item.description}</Text>
                                             <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 6 }}>
-                                                <TouchableOpacity onPress={() => navigation.navigate("Fund")}
+                                                <TouchableOpacity onPress={() => navigation.navigate("JobDetails")}
                                                     style={{ borderColor: Theme.colors.primary, borderWidth: 1, padding: 5, borderRadius: 100, width: 150, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                                     <FontAwesomeIcon icon={faBriefcase} color={Theme.colors.primary} />
                                                     <Text style={{ fontSize: 13, alignItems: 'center', fontWeight: 'bold', marginLeft: 5, color: Theme.colors.primary }}>See detials</Text>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity onPress={() => navigation.navigate("Fund")}
+                                                <TouchableOpacity onPress={() => navigation.navigate("ApplyNow")}
                                                     style={{ backgroundColor: Theme.colors.primary, padding: 5, borderRadius: 100, width: 150, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                                     <MaterialCommunityIcons name='briefcase-check' size={20} style={{ color: "white" }} />
                                                     <Text style={{ fontSize: 13, alignItems: 'center', fontWeight: 'bold', marginLeft: 5, color: "white" }}>Apply now</Text>
@@ -126,7 +126,7 @@ function Home({ navigation }) {
                                     </View>
                                 )
                             }}
-                            keyExtractor={({ item }) => item}
+                            key={({ item }) => {item.id}}
                         />
                     </View>
                 </ScrollView>

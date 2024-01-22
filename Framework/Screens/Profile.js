@@ -10,6 +10,7 @@ import { AppContext } from "../Components/globalVariables";
 import { formatMoney } from "../Components/FormatMoney";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faPlusCircle, faUserCircle, faXmark } from "@fortawesome/free-solid-svg-icons";
+import * as Imagepicker from "expo-image-picker"
 
 export function Profile({ navigation }) {
     const { userInfo, setUserInfo, setUserUID, setPreloader } = useContext(AppContext);
@@ -29,6 +30,7 @@ export function Profile({ navigation }) {
         }, 2000);
     }
 
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
@@ -47,7 +49,7 @@ export function Profile({ navigation }) {
                     </View>
                     <View style={{ marginBottom: 10 }}>
                         <Text style={{ fontSize: 15, fontFamily: Theme.fonts.text500, textAlign: "center" }}>Balance</Text>
-                        <Text style={{ fontSize: 14, }}>$<Text style={{ fontSize: 20 }}>{formatMoney(userInfo.balance)}</Text></Text>
+                        <Text style={{ fontSize: 14, }}>$<Text style={{ fontSize: 20 }}>{formatMoney(userInfo.balance || 0)}</Text></Text>
                         <TouchableOpacity onPress={() => navigation.navigate("Fund")}
                             style={{ borderColor: Theme.colors.primary, borderWidth: 1, padding: 5, borderRadius: 100, width: 100, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                             <FontAwesomeIcon icon={faPlusCircle} color={Theme.colors.primary} />

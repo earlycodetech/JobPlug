@@ -5,9 +5,10 @@ export const Theme = {
         blueLight: "#CCE0F0",
         blueMedium: "#2F80ED",
         blueDark: "#53b8ee",
-        greenLight: "#0E4D2B",
+        green: "#3bb75e",
+        greenDark: "#0E4D2B",
         greenMedium: "#50C878",
-        greenDark: "#B7E4C7",
+        greenLight: "#B7E4C7",
         text: "#00000099",
     },
     fonts: {

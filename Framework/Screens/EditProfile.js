@@ -40,6 +40,7 @@ export function EditProfile({ navigation }) {
         setimageMD(!imageMD);
     };
 
+    // import * as Imagepicker from "expo-image-picker"
     async function picker() {
         const result = await Imagepicker.launchImageLibraryAsync({
             allowsEditing: true,
