@@ -4,7 +4,7 @@ import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
 import { useContext } from "react";
 import { AppContext } from "../Components/globalVariables";
 import { Theme } from "../Components/Theme";
-import { PAYSTACK_PUBLIC_KEY } from "../../Firebase/APIkeys";
+import { PAYSTACK_PUBLIC_KEY } from "../../Firebase/APIkeys.key";
 import { db } from "../../Firebase/settings";
 
 export function Pay({ navigation, route }) {

@@ -8,8 +8,9 @@ import { } from 'react-native';
 import { doc, updateDoc, } from 'firebase/firestore';
 import { AppContext } from '../Components/globalVariables';
 import { Theme } from '../Components/Theme';
-import { db, imgStorage } from '../../Firebase/settings';
+import { db, imgStorage, storage } from '../../Firebase/settings';
 import * as Imagepicker from "expo-image-picker"
+import { getDownloadURL, ref } from 'firebase/storage';
 
 
 export function EditProfile({ navigation }) {
@@ -25,11 +26,9 @@ export function EditProfile({ navigation }) {
     const [nickname, setNickname] = useState(userInfo.nickname);
     const width = Dimensions.get("screen").width
 
+
+
     useEffect(() => {
-        (async () => {
-            const { status } = await Camera.requestPermissionsAsync();
-            setHasPermission(status === 'granted');
-        })();
         // setPreloader(false)
     }, []);
 
@@ -44,11 +43,11 @@ export function EditProfile({ navigation }) {
         setimageMD(!imageMD);
     };
 
-    // import * as Imagepicker from "expo-image-picker"
+
     async function picker() {
         const result = await Imagepicker.launchImageLibraryAsync({
             mediaType: Imagepicker.MediaTypeOptions.Images,
-            allowsEditing: true,
+            allowsEditing: false,
             aspect: [4, 4],
             quality: 1,
         })
@@ -56,8 +55,33 @@ export function EditProfile({ navigation }) {
         if (!result.canceled) {
             const { uri } = result.assets[0];
             setImage(uri)
-            uplaodToStorage();
+            previewModal();
         }
+    }
+
+    async function fetchProfilePic() {
+        setPreloader(true)
+        const reference = ref(storage, `ProfileImages/${userUID}`);
+        await getDownloadURL(reference).then(userImg => {
+            updateDoc(doc(db, "users", userUID), {
+                image: userImg
+            }).then(() => {
+                Alert.alert(
+                    "Profile Image uploaded",
+                    "Your profile picture has been uploaded successfully!",
+                );
+                setPreloader(false)
+            })
+                .catch(() => {
+                    Alert.alert(
+                        "Upload Status",
+                        "Failed to update profile image. Please try again",
+                    )
+                    setPreloader(false);
+                })
+        }).catch(() => {
+            setPreloader(false);
+        })
     }
 
     async function uplaodToStorage() {
@@ -74,6 +98,13 @@ export function EditProfile({ navigation }) {
                 [{ text: 'OK' }]
             )
         }
+    }
+
+    function handleUpload() {
+        setPreloader(true)
+        uplaodToStorage().then(() => {
+            fetchProfilePic()
+        })
     }
 
     function editProfile() {
@@ -110,7 +141,9 @@ export function EditProfile({ navigation }) {
                 <View style={styles.header}>
                     <View style={{ position: "relative" }}>
                         <Pressable onPress={imageModal}>
-                            <Image source={require('../../assets/user.png')} style={styles.ProfileImage} />
+                            <Image source={{ uri: userInfo.image }}
+                                defaultSource={require("../../assets/user.png")}
+                                style={styles.ProfileImage} />
                         </Pressable>
                         <TouchableOpacity onPress={closeModal} style={styles.BtnIcon}>
                             <FontAwesomeIcon icon={faCameraRetro} color="#16171D" size={15} />
@@ -263,7 +296,7 @@ export function EditProfile({ navigation }) {
                         <View style={{ alignItems: 'center', padding: 5, justifyContent: 'center' }}>
                             <Image source={{ uri: image }} style={{ width: 300, height: 300, borderRadius: 400, }} />
                         </View>
-                        <TouchableOpacity onPress={() => { previewModal(); uplaodToStorage() }}
+                        <TouchableOpacity onPress={() => { previewModal(); handleUpload() }}
                             style={[styles.getStarted, { marginHorizontal: 10 }]}>
                             <Text style={{ fontFamily: Theme.fonts.text500, fontSize: 16, }}>Upload Image</Text>
                         </TouchableOpacity>

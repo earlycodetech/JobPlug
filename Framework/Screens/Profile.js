@@ -36,7 +36,8 @@ export function Profile({ navigation }) {
             <View style={styles.container}>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", borderColor: Theme.colors.primary, borderBottomWidth: 2, borderRadius: 20 }}>
                     <View style={{}}>
-                        <Avatar.Image size={80} source={require("../../assets/user.png")} />
+                        <Image style={{ width: 80, height: 80, borderRadius: 50 }} source={{ uri: userInfo.image }}
+                            defaultSource={require("../../assets/user.png")} />
                         <View style={{ marginBottom: 10, }}>
                             <Text style={{ fontSize: 30, fontFamily: Theme.fonts.text500 }}>{userInfo.firstName} {userInfo.lastName}</Text>
                             <Text style={{ fontSize: 15, fontFamily: Theme.fonts.text500 }}>{userInfo.email}</Text>

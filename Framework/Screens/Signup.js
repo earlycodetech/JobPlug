@@ -1,5 +1,5 @@
-import { Alert, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useContext } from 'react'
+import { Alert, KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useContext, useEffect } from 'react'
 import { Button } from 'react-native-paper'
 import { Theme } from '../Components/Theme'
 import { Formik } from 'formik'
@@ -22,133 +22,141 @@ const validation = yup.object({
 export function Signup({ navigation }) {
     const { setPreloader, setUserUID } = useContext(AppContext)
 
+    useEffect(() => {
+        // setPreloader(false)
+    }, [])
+
     // const [email, setEmail] = useState("")
 
     return (
         <SafeAreaView style={{ flex: 1 }} >
-            <View style={styles.container}>
-                <Formik
-                    initialValues={{ email: "", password: "", firstName: "", lastName: "", phone: "", address: "", gender: "" }}
-                    onSubmit={(value) => {
-                        setPreloader(true)
-                        createUserWithEmailAndPassword(authentication, value.email, value.password)
-                            .then(() => {
-                                onAuthStateChanged(authentication, (user) => {
-                                    setUserUID(user.uid)
-                                    setDoc(doc(db, "users", userUID), {
-                                        balance: 0,
-                                        firstName: value.firstName,
-                                        lastName: value.lastName,
-                                        gender: value.gender,
-                                        phone: value.phone,
-                                        address: value.address,
-                                        accountStatus: "active",
-                                        email: value.email,
-                                        image: null
-                                    }).then(() => {
-                                        setPreloader(false)
-                                        navigation.navigate("HomeScreen")
-                                    }).catch((error) => {
-                                        // console.log(typeof error.code)
-                                        setPreloader(false)
-                                        Alert.alert(
-                                            "Message!",
-                                            errorMessage(error.code),
-                                            [{ text: "Try Again" }]
-                                        )
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={{ flex: 1 }}>
+                <View style={styles.container}>
+                    <Formik
+                        initialValues={{ email: "", password: "", firstName: "", lastName: "", phone: "", address: "", gender: "" }}
+                        onSubmit={(value) => {
+                            setPreloader(true)
+                            createUserWithEmailAndPassword(authentication, value.email, value.password)
+                                .then(() => {
+                                    onAuthStateChanged(authentication, (user) => {
+                                        setUserUID(user.uid)
+                                        setDoc(doc(db, "users", user.uid), {
+                                            balance: 0,
+                                            firstName: value.firstName,
+                                            lastName: value.lastName,
+                                            gender: value.gender,
+                                            phone: value.phone,
+                                            address: value.address,
+                                            accountStatus: "active",
+                                            email: value.email,
+                                            image: null
+                                        }).then(() => {
+                                            setPreloader(false)
+                                            navigation.navigate("HomeScreen")
+                                        }).catch((error) => {
+                                            // console.log(typeof error.code)
+                                            setPreloader(false)
+                                            Alert.alert(
+                                                "Message!",
+                                                errorMessage(error.code),
+                                                [{ text: "Try Again" }]
+                                            )
+                                        })
                                     })
                                 })
-                            })
-                            .catch((error) => {
-                                // console.log(typeof error.code)
-                                Alert.alert(
-                                    "Message!",
-                                    errorMessage(error.code),
-                                    [{ text: "Try Again" }]
-                                )
-                            })
-                    }}
-                    validationSchema={validation}
-                >
-                    {(prop) => {
-                        return (
-                            <View style={styles.form}>
-                                <Text style={styles.header}>Sign Up</Text>
-                                <Text style={[styles.header, { marginBottom: 20 }]}>Your Account!</Text>
+                                .catch((error) => {
+                                    // console.log(typeof error.code)
+                                    Alert.alert(
+                                        "Message!",
+                                        errorMessage(error.code),
+                                        [{ text: "Try Again" }]
+                                    )
+                                })
+                        }}
+                        validationSchema={validation}
+                    >
+                        {(prop) => {
+                            return (
+                                <View style={styles.form}>
+                                    <Text style={styles.header}>Sign Up</Text>
+                                    <Text style={[styles.header, { marginBottom: 20 }]}>Your Account!</Text>
 
-                                <Text style={styles.placeholder}>First Name</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    autoCapitalize="none"
-                                    onChangeText={prop.handleChange("firstName")}
-                                    onBlur={prop.handleBlur("firstName")}
-                                    value={prop.values.firstName}
-                                />
-                                <Text style={styles.placeholder}>Last Name</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    autoCapitalize="none"
-                                    onChangeText={prop.handleChange("lastName")}
-                                    onBlur={prop.handleBlur("lastName")}
-                                    value={prop.values.lastName}
-                                />
-                                <Text style={styles.placeholder}>Phone number</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={prop.handleChange("phone")}
-                                    onBlur={prop.handleBlur("phone")}
-                                    value={prop.values.phone}
-                                />
+                                    <Text style={styles.placeholder}>First Name</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        autoCapitalize="none"
+                                        onChangeText={prop.handleChange("firstName")}
+                                        onBlur={prop.handleBlur("firstName")}
+                                        value={prop.values.firstName}
+                                    />
+                                    <Text style={styles.placeholder}>Last Name</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        autoCapitalize="none"
+                                        onChangeText={prop.handleChange("lastName")}
+                                        onBlur={prop.handleBlur("lastName")}
+                                        value={prop.values.lastName}
+                                    />
+                                    <Text style={styles.placeholder}>Phone number</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        onChangeText={prop.handleChange("phone")}
+                                        onBlur={prop.handleBlur("phone")}
+                                        value={prop.values.phone}
+                                    />
 
-                                <Text style={styles.placeholder}>Home Address</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={prop.handleChange("address")}
-                                    onBlur={prop.handleBlur("address")}
-                                    value={prop.values.address}
-                                />
+                                    <Text style={styles.placeholder}>Home Address</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        onChangeText={prop.handleChange("address")}
+                                        onBlur={prop.handleBlur("address")}
+                                        value={prop.values.address}
+                                    />
 
-                                <Text style={styles.placeholder}>Gender</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={prop.handleChange("gender")}
-                                    onBlur={prop.handleBlur("gender")}
-                                    value={prop.values.gender}
-                                />
+                                    <Text style={styles.placeholder}>Gender</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        onChangeText={prop.handleChange("gender")}
+                                        onBlur={prop.handleBlur("gender")}
+                                        value={prop.values.gender}
+                                    />
 
-                                <Text style={styles.placeholder}>Email Address</Text>
-                                <TextInput
-                                    style={[styles.input, { marginBottom: 0 }]}
-                                    autoCapitalize="none"
-                                    onChangeText={prop.handleChange("email")}
-                                    onBlur={prop.handleBlur("email")}
-                                    value={prop.values.email}
-                                />
-                                <Text style={[styles.error, { display: prop.errors.email ? "flex" : "none" }]}>{prop.errors.email}</Text>
+                                    <Text style={styles.placeholder}>Email Address</Text>
+                                    <TextInput
+                                        style={[styles.input, { marginBottom: 0 }]}
+                                        autoCapitalize="none"
+                                        onChangeText={prop.handleChange("email")}
+                                        onBlur={prop.handleBlur("email")}
+                                        value={prop.values.email}
+                                    />
+                                    <Text style={[styles.error, { display: prop.errors.email ? "flex" : "none" }]}>{prop.errors.email}</Text>
 
-                                <Text style={styles.placeholder}>Password</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    autoCapitalize="none"
-                                    secureTextEntry
-                                    onChangeText={prop.handleChange("password")}
-                                    onBlur={prop.handleBlur("password")}
-                                    value={prop.values.password}
+                                    <Text style={styles.placeholder}>Password</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        autoCapitalize="none"
+                                        secureTextEntry
+                                        onChangeText={prop.handleChange("password")}
+                                        onBlur={prop.handleBlur("password")}
+                                        value={prop.values.password}
 
-                                />
-                                <Text style={[styles.error, { display: prop.errors.password ? "flex" : "none" }]}>{prop.errors.password}</Text>
+                                    />
+                                    <Text style={[styles.error, { display: prop.errors.password ? "flex" : "none" }]}>{prop.errors.password}</Text>
 
-                                <TouchableOpacity onPress={prop.handleSubmit} style={styles.appBTN}>
-                                    <Text style={{ fontSize: 16, color: "white", fontFamily: Theme.fonts.text600 }}>Sign Up</Text>
-                                </TouchableOpacity>
-                            </View>
-                        )
-                    }}
-                </Formik>
-                <TouchableOpacity onPress={() => navigation.navigate("Login")} style={{ alignItems: "center", marginTop: 10 }}>
-                    <Text style={{ fontSize: 16, color: Theme.colors.primary, fontFamily: Theme.fonts.text600 }}>I have an account. Login</Text>
-                </TouchableOpacity>
-            </View>
+                                    <TouchableOpacity onPress={prop.handleSubmit} style={styles.appBTN}>
+                                        <Text style={{ fontSize: 16, color: "white", fontFamily: Theme.fonts.text600 }}>Sign Up</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            )
+                        }}
+                    </Formik>
+                    <TouchableOpacity onPress={() => navigation.navigate("Login")} style={{ alignItems: "center", marginTop: 10 }}>
+                        <Text style={{ fontSize: 16, color: Theme.colors.primary, fontFamily: Theme.fonts.text600 }}>I have an account. Login</Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }

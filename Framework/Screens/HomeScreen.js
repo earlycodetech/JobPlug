@@ -54,7 +54,7 @@ function Home({ navigation }) {
                 <View style={[styles.topBar, { marginBottom: 10 }]}>
                     <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
                         <View style={{ borderRadius: 50, borderColor: Theme.colors.primary, borderWidth: 1, padding: 3 }}>
-                            <Image source={require("../../assets/logo.png")} style={styles.dp} />
+                            <Image source={{ uri: userInfo.image }} defaultSource={require("../../assets/user.png")} style={styles.dp} />
                         </View>
                         <Text style={{ fontSize: 18 }}>{userInfo.firstName} {userInfo.lastName}</Text>
                     </View>

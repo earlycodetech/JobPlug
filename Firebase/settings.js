@@ -4,7 +4,7 @@ import { getFirestore } from "firebase/firestore"
 import 'firebase/compat/storage';
 import firebase from "firebase/compat/app";
 import { getStorage } from "firebase/storage";
-import { firebaseAPI } from "./APIkeys";
+import { firebaseAPI } from "./APIkeys.key.js";
 
 const firebaseConfig = {
     apiKey: firebaseAPI.apiKey,

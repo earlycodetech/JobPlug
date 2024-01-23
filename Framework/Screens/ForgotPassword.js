@@ -1,11 +1,13 @@
-import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useContext } from 'react'
+import { Alert, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useContext, useState } from 'react'
 import { Button } from 'react-native-paper'
 import { Theme } from '../Components/Theme'
 import { AppContext } from '../Components/globalVariables'
 import { Formik } from 'formik'
 import * as yup from "yup"
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { sendPasswordResetEmail } from 'firebase/auth'
+import { authentication } from '../../Firebase/settings'
 
 
 const validationSchema = yup.object({
@@ -15,42 +17,47 @@ const validationSchema = yup.object({
 
 export function ForgotPassword({ navigation, route }) {
     // console.log(route.params.metaData)
-    const { email, setEmail } = useContext(AppContext)
-    // const [email, setEmail] = useState("")
+    const { setPreloader } = useContext(AppContext)
+    const [email, setEmail] = useState("")
+
+    function passwordReset() {
+        setPreloader(true)
+        sendPasswordResetEmail(authentication, email).then(() => {
+            setPreloader(false)
+            Alert.alert(
+                "Password reset",
+                "A password reset link has been sent to your mail",
+            );
+        }).catch((e) => {
+            console.log(e);
+            setPreloader(false)
+            // Alert.alert(
+            //     "Password Reset",
+
+            // );
+        })
+    }
 
     return (
         <SafeAreaView style={{ flex: 1 }} >
             <View style={styles.container}>
-                <Formik
-                    style={{ flex: 1 }}
-                    initialValues={{ email: "", password: "" }}
-                    onSubmit={(value) => {
-                        console.log(value);
-                    }}
-                    validationSchema={validationSchema}
-                >
-                    {(prop) => {
-                        return (
-                            <View style={styles.form}>
-                                <Text style={styles.header}>Forgot account</Text>
-                                <Text style={[styles.header, { marginBottom: 20 }]}>Password?</Text>
-                                <Text style={styles.placeholder}>Please enter your account email, and a password reset link will be sent to your email.</Text>
 
-                                <Text style={styles.placeholder}>Email Address</Text>
-                                <TextInput
-                                    style={[styles.input, { marginBottom: 0 }]}
-                                    autoCapitalize="none"
-                                    onChangeText={prop.handleChange("email")}
-                                />
-                                <Text style={[styles.error, { display: prop.errors.email ? "flex" : "none" }]}>{prop.errors.email}</Text>
+                <View style={styles.form}>
+                    <Text style={styles.header}>Forgot account</Text>
+                    <Text style={[styles.header, { marginBottom: 20 }]}>Password?</Text>
+                    <Text style={styles.placeholder}>Please enter your account email, and a password reset link will be sent to your email.</Text>
 
-                                <TouchableOpacity onPress={prop.handleSubmit} style={styles.appBTN}>
-                                    <Text style={{ fontSize: 16, color: "white", fontFamily: Theme.fonts.text600 }}>Send Link</Text>
-                                </TouchableOpacity>
-                            </View>
-                        )
-                    }}
-                </Formik>
+                    <Text style={styles.placeholder}>Email Address</Text>
+                    <TextInput
+                        style={[styles.input, { marginBottom: 0 }]}
+                        autoCapitalize="none"
+                        onChangeText={(inp) => setEmail(inp)}
+                    />
+
+                    <TouchableOpacity onPress={passwordReset} style={styles.appBTN}>
+                        <Text style={{ fontSize: 16, color: "white", fontFamily: Theme.fonts.text600 }}>Send Link</Text>
+                    </TouchableOpacity>
+                </View>
                 <TouchableOpacity onPress={() => navigation.navigate("Login")} style={{ alignItems: "center", marginTop: 10 }}>
                     <Text style={{ fontSize: 16, color: Theme.colors.primary, fontFamily: Theme.fonts.text600 }}>Remember your password?</Text>
                 </TouchableOpacity>

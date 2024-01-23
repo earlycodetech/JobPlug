@@ -14,8 +14,8 @@ web-build/
 *.p8
 *.p12
 *.key
+*.key.js
 *.mobileprovision
-*APIkeys.js
 
 # Metro
 .metro-health-check*
