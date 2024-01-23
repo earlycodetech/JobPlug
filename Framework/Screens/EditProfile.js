@@ -26,6 +26,10 @@ export function EditProfile({ navigation }) {
     const width = Dimensions.get("screen").width
 
     useEffect(() => {
+        (async () => {
+            const { status } = await Camera.requestPermissionsAsync();
+            setHasPermission(status === 'granted');
+        })();
         // setPreloader(false)
     }, []);
 
@@ -43,6 +47,7 @@ export function EditProfile({ navigation }) {
     // import * as Imagepicker from "expo-image-picker"
     async function picker() {
         const result = await Imagepicker.launchImageLibraryAsync({
+            mediaType: Imagepicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 4],
             quality: 1,
