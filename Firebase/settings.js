@@ -4,14 +4,15 @@ import { getFirestore } from "firebase/firestore"
 import 'firebase/compat/storage';
 import firebase from "firebase/compat/app";
 import { getStorage } from "firebase/storage";
+import { firebaseAPI } from "./APIkeys";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDeHdRptp7SvTwVbdQbULeV4rCoRmWAnK4",
-    authDomain: "jobplug-e45ae.firebaseapp.com",
-    projectId: "jobplug-e45ae",
-    storageBucket: "jobplug-e45ae.appspot.com",
-    messagingSenderId: "771097398518",
-    appId: "1:771097398518:web:b78367d98abb53a322b0d7"
+    apiKey: firebaseAPI.apiKey,
+    authDomain: firebaseAPI.authDomain,
+    projectId: firebaseAPI.projectId,
+    storageBucket: firebaseAPI.storageBucket,
+    messagingSenderId: firebaseAPI.messagingSenderId,
+    appId: firebaseAPI.appId
 };
 
 if (!firebase.apps.length) {
