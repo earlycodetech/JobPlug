@@ -86,7 +86,7 @@ export function Fund({ navigation }) {
 
                                     <View style={{ alignItems: 'center', marginBottom: 20, justifyContent: "space-between", flexDirection: "row" }}>
                                         <Text style={styles.modalText}>Payment Method</Text>
-                                        <Text style={[styles.modalText, { color: Theme.colors.text, fontSize: 20, fontWeight: "bold", fontFamily: null }]}>Paystack</Text>
+                                        <Text style={[styles.modalText, { color: Theme.colors.text, fontSize: 20, fontWeight: "bold", fontFamily: null }]}>Paystack(ATM Card)</Text>
                                     </View>
 
                                     <View style={{ alignItems: 'center', marginBottom: 20, justifyContent: "space-between", flexDirection: "row" }}>

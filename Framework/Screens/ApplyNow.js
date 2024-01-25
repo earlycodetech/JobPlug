@@ -10,40 +10,40 @@ import { AppContext } from "../Components/globalVariables";
 import { Picker } from '@react-native-picker/picker';
 
 
-export function ApplyNow({ navigation }) {
-    const { userUID, setPreloader, userInfo } = useContext(AppContext)
-    const [jobTitle, setJobTitle] = useState("");
-    const [jobType, setJobType] = useState("");
-    const [jobLocation, setJobLocation] = useState("");
-    const [company, setCompany] = useState("");
-    const [workplace, setWorkplace] = useState("");
-    const [contactInfo, setContactInfo] = useState(userInfo.email);
-    const [description, setDescription] = useState(userInfo.email);
+export function ApplyNow({ navigation, route }) {
+    const { userInfo, setPreloader, userUID, docID } = useContext(AppContext);
+    const { jobTitle } = route.params
+
+    const [description, setDescription] = useState("");
+    const [address, setAddress] = useState("")
+    const [Image, setImage] = useState("")
+    const [firstName, setFirstName] = useState(userInfo.firstName)
+    const [lastName, setLastName] = useState(userInfo.lastName)
+    const [email, setEmail] = useState(userInfo.email)
 
     function applyJob() {
         setPreloader(true)
         addDoc(collection(db, "appliedJobs"), {
-            jobTitle,
-            jobType,
-            jobLocation,
-            company,
-            workplace,
-            contactInfo,
-            description,
+            address,
+            lastName,
+            email,
+            firstName,
+            appliedAt: new Date().getTime(),
             userUID,
-            createdAt: new Date().getTime(),
+            jobTitle,
+            jobID: docID,
         }).then(() => {
             setPreloader(false)
             Alert.alert(
-                "Post Job",
-                "Job has been posted successfully",
+                "Application",
+                "Application sent successfully"
             )
         }).catch((error) => {
             // console.log(typeof error.code)
             setPreloader(false)
             Alert.alert(
-                "Message!",
-                errorMessage(error.code),
+                "Application Failed",
+                "Failed to Apply, Please try again!"
                 [{ text: "Try Again" }]
             )
         })
@@ -51,55 +51,44 @@ export function ApplyNow({ navigation }) {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-            <ScrollView>
+            <ScrollView style={{ flex: 1 }}>
                 <View style={styles.container}>
-                    <Text style={{ fontFamily: Theme.fonts.text800, fontSize: 29, alignSelf: 'center' }}>Let's create your job post</Text>
-                    <View style={{ flex: 1, marginBottom: 20 }}>
-                        <Text style={{ fontFamily: Theme.fonts.text200, marginTop: 10 }}>* indicates required</Text>
-                        <Text style={styles.Text}>
-                            Job title*
-                        </Text>
-                        <View>
-                            <TextInput style={styles.TextInput}
-                                onChangeText={(inp) => setJobTitle(inp.trim())}
-                            />
-                        </View>
-                        <Text style={styles.Text}>Company*</Text>
-                        <View>
-                            <TextInput style={styles.TextInput}
-                                onChangeText={(inp) => setCompany(inp.trim())}
-                            />
-                        </View>
-                        <Text style={styles.Text}>Job location*</Text>
-                        <View>
-                            <TextInput style={styles.TextInput}
-                                onChangeText={(inp) => setJobLocation(inp.trim())}
-                            />
-                        </View>
-
-                        <Text style={styles.Text}>Contact Info*</Text>
-                        <View>
-                            <TextInput style={styles.TextInput}
-                                onChangeText={(inp) => setContactInfo(inp.trim())}
-                                value={contactInfo}
-                                autoCapitalize="none"
-                                autoComplete="off"
-                            />
-                        </View>
-                        <Text style={styles.Text}>Job Description*</Text>
-                        <View>
-                            <TextInput style={styles.TextInput}
-                                multiline={true}
-                                numberOfLines={5}
-                                onChangeText={(inp) => setDescription(inp.trim())}
-                            />
-                        </View>
-
+                    <Text style={{ fontSize: 40, fontFamily: Theme.fonts.text900, marginBottom: 20 }}>Apply now</Text>
+                    <Text style={{ fontSize: 20, fontFamily: Theme.fonts.text600, marginBottom: 20 }}>{jobTitle}</Text>
+                    <Text style={styles.Text}>FirstName*</Text>
+                    <View>
+                        <TextInput placeholder="FirstName"
+                            style={styles.TextInput}
+                            value={userInfo.firstName}
+                        // onChangeText={(inp)=> userInfo.fullName(inp.trim())}
+                        />
                     </View>
-                    <TouchableOpacity onPress={applyJob} style={[styles.TextInput, { alignItems: 'center', borderColor: Theme.colors.blueMedium, backgroundColor: Theme.colors.blueMedium }]}>
-                        <Text style={{ fontFamily: Theme.fonts.text500, color: "white" }}>Apply Now</Text>
-                    </TouchableOpacity>
+                    <Text style={styles.Text}>LastName*</Text>
+                    <View>
+                        <TextInput placeholder="LastName"
+                            style={styles.TextInput}
+                            value={userInfo.lastName}
+                        // onChangeText={(inp)=> (inp.trim())}
+                        />
+                    </View>
+                    <Text style={styles.Text}>Contact Info*</Text>
+                    <View>
+                        <TextInput placeholder="Email"
+                            style={styles.TextInput}
+                            value={userInfo.email}
+                        />
+                    </View>
+                    <Text style={styles.Text}>Address*</Text>
+                    <View>
+                        <TextInput placeholder="Address"
+                            style={styles.TextInput}
+                            onChangeText={(inp) => setAddress(inp.trim())}
+                        />
+                    </View>
                 </View>
+                <TouchableOpacity onPress={applyJob} style={[styles.TextInput, { alignItems: 'center', borderColor: Theme.colors.blueMedium, backgroundColor: Theme.colors.blueMedium, margin: 20 }]}>
+                    <Text style={{ fontFamily: Theme.fonts.text500, color: "white" }}>Apply Now</Text>
+                </TouchableOpacity>
             </ScrollView>
         </SafeAreaView>
     );
