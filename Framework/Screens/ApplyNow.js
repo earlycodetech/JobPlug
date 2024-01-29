@@ -12,7 +12,7 @@ import { Picker } from '@react-native-picker/picker';
 
 export function ApplyNow({ navigation, route }) {
     const { userInfo, setPreloader, userUID, docID } = useContext(AppContext);
-    const { jobTitle } = route.params
+    const { jobTitle, company } = route.params
 
     const [description, setDescription] = useState("");
     const [address, setAddress] = useState("")
@@ -31,6 +31,7 @@ export function ApplyNow({ navigation, route }) {
             appliedAt: new Date().getTime(),
             userUID,
             jobTitle,
+            company,
             jobID: docID,
         }).then(() => {
             setPreloader(false)

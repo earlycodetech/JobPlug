@@ -10,7 +10,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { Profile } from "./Profile";
 import Carousel from 'react-native-reanimated-carousel';
 import { AppContext } from "../Components/globalVariables";
-import { collection, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../../Firebase/settings";
 import { faAngleRight, faBriefcase, faLocationDot, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { PostJob } from "./PostJob";
@@ -39,7 +39,9 @@ function Home({ navigation }) {
 
     useEffect(() => {
         // console.log(userUID);
-        onSnapshot(collection(db, "jobs"), (snapshot) => {
+        const q = collection(db, 'jobs');
+        const filter = query(q, where('status', '==', "active"));
+        onSnapshot(filter, (snapshot) => {
             const allData = []
             snapshot.forEach(item => {
                 allData.push({ ...item.data(), docID: item.id })
@@ -118,7 +120,7 @@ function Home({ navigation }) {
                                                 <FontAwesomeIcon icon={faBriefcase} color={Theme.colors.primary} />
                                                 <Text style={{ fontSize: 13, alignItems: 'center', fontWeight: 'bold', marginLeft: 5, color: Theme.colors.primary }}>See detials</Text>
                                             </TouchableOpacity>
-                                            <TouchableOpacity onPress={() => { navigation.navigate("ApplyNow", { jobTitle: item.jobTitle }); setDocID(item.docID) }}
+                                            <TouchableOpacity onPress={() => { navigation.navigate("ApplyNow", { jobTitle: item.jobTitle, company: item.company }); setDocID(item.docID) }}
                                                 style={{ backgroundColor: Theme.colors.primary, padding: 5, borderRadius: 100, width: 150, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                                 <MaterialCommunityIcons name='briefcase-check' size={20} style={{ color: "white" }} />
                                                 <Text style={{ fontSize: 13, alignItems: 'center', fontWeight: 'bold', marginLeft: 5, color: "white" }}>Apply now</Text>
