@@ -8,6 +8,8 @@ function AppProvider({ children }) {
     const [password, setPassword] = useState(undefined);
     const [preloader, setPreloader] = useState(false);
     const [docID, setDocID] = useState("");
+    const [allJobs, setAllJobs] = useState([]);
+
 
 
     return (
@@ -16,7 +18,9 @@ function AppProvider({ children }) {
             userInfo, setUserInfo,
             password, setPassword,
             preloader, setPreloader,
+            allJobs, setAllJobs,
             userUID, setUserUID
+
         }}>
             {children}
         </AppContext.Provider>
